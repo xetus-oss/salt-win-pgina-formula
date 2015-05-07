@@ -1,4 +1,4 @@
-# Overview
+# salt-win-pgina-formula
 
 The salt state for installing and configuring [pGina](http://pgina.org/) on windows systems. 
 
@@ -34,3 +34,4 @@ pgina_ldap_pillar.example | LDAP plugin pillar data
 ## NOTES
 
 This salt state has been tested on a Windows Server 2012 and Windows 8.1.
+=======
