@@ -1,0 +1,93 @@
+# 
+# Pillar data representing configuration options for PGina in general
+# 
+# Each plugin is represented by it's UUID. The registry entry with a UUID for a
+# name represents which options you wish to enable for a particular plugin
+# (ie Authentication, Authorization, etc...) 
+# 
+pgina_general:
+  TileImage: 'C:\path\to\tile\image.png'
+  EnableMotd: 'True'
+  Motd: 'pGina Version: %v'
+  MaxClients: 25 
+  TraceMsgTraffic: 'False'
+  ShowServiceStatusInLogonUi: 'True' 
+  UseOriginalUsernameInUnlockScenario: 'False'
+  LogonProgressMessage: 'Logging on %u.'
+  #
+  # ++++++ Plugin feature configuration:
+  # 
+  # Each plugin is represented by its UUID. Since we only support configuration
+  # for the LDAP and Local Authentication plugins at the moment, we've only
+  # labeled the UUIDs that correspond with the supported plugins.
+  #
+  # Configuring which feature to use for which plugin is done by specifying a 
+  # dictionary with the feature name as the key, and a true value if you want
+  # to enable the feature and false if you want to disable the feature. you do
+  # not need to specify the feature, it will default to disabled if omitted.
+  #
+  # Features available are:
+  # authentication
+  # authorization
+  # gateway
+  # notification
+  #
+#
+  # LDAP plugin UUID
+  0f52390b-c781-43ae-bd62-553c77fa4cf7:
+    authentication: True
+    authorization: True
+    gateway: True
+    notification: False
+  # LocalAuthentication plugin UUID
+  12FA152D-A2E3-4C8D-9535-5DCD49DFCB6D:
+    authentication: True
+    authorization: True
+    gateway: True
+  a89df410-53ca-4fe1-a6ca-4479b841ca19:
+    notification: False
+  b68cf064-9299-4765-ac08-acb49f93f892:
+    notification: False
+  16fc47c0-f17b-4d99-a820-edbf0b0c764a:
+    notification: False
+  d73131d7-7af2-47bb-bbf4-4f8583b44962:
+    notification: False
+  81f8034e-e278-4754-b10c-7066656de5b7:
+    notification: False
+  ec3221a6-621f-44ce-b77b-e074298d6b4e:
+    notification: False
+  350047a0-2d0b-4e24-9f99-16cd18d6b142:
+    notification: False
+  98477b3a-830d-4bee-b270-2d7435275f9c:
+    notification: False
+  #
+  # ------ END plugin feature configuration
+#
+  #
+  # ++++++ Plugin order configuration
+  #
+  # The plugin order is configured by specifying a list of string UUIDs 
+  # corresponding to the plugins.
+  #
+  IPluginAuthentication_Order: 
+    - '0f52390b-c781-43ae-bd62-553c77fa4cf7'
+    - '12FA152D-A2E3-4C8D-9535-5DCD49DFCB6D'
+  IPluginAuthorization_Order:
+    - '0f52390b-c781-43ae-bd62-553c77fa4cf7'
+    - '12FA152D-A2E3-4C8D-9535-5DCD49DFCB6D'
+  IPluginAuthenticationGateway_Order: 
+    - '0f52390b-c781-43ae-bd62-553c77fa4cf7'
+    - '12FA152D-A2E3-4C8D-9535-5DCD49DFCB6D'
+  IPluginEventNotifications_Order:
+    - '12FA152D-A2E3-4C8D-9535-5DCD49DFCB6D'
+  # 
+  # ------ END Plugin order configuration
+#
+  GinaPassthru: 'False'
+  EnableSpecialActionButton: 'False'
+  SpecialAction: 'Shutdown'
+  CredentialProviderFilters:
+    - 'some\credential\provider.dll'
+    - 'some\other\credential\provider.dll'
+  CredentialProviderDefaultTile: 'True'
+

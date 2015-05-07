@@ -1,0 +1,26 @@
+# 
+# Pillar data for the PGina LocalAuthentication plugin
+# 
+pgina_local:
+  AlwaysAuthenticate: 'False'
+  AuthzLocalAdminsOnly: 'False'
+  AuthzLocalGroupsOnly: 'False'
+  AuthzLocalGroups:
+    - 'LocalGroup1'
+    - 'LocalGroup2'
+  AuthzApplyToAllUsers: 'True'
+  MirrorGroupsForAuthdUsers: 'True'
+  GroupCreateFailIsFail: 'True'
+  MandatoryGroups:
+    - 'MandatoryGroup1'
+    - 'MandatoryGroup2'
+  RemoveProfiles: 'False'
+  ScramblePasswords: 'False'
+  ScramblePasswordsWhenLMAuthFails: 'True'
+  ScramblePasswordsExceptions: 
+    - 'passwordException1'
+    - 'passwordException2'
+  CleanupUsers:
+    - 'cleanupUser1'
+    - 'cleanupUser2'
+  BackgroundTimerSeconds: '60'

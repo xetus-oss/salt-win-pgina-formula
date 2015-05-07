@@ -1,0 +1,91 @@
+# 
+# Pillar data representing configuration options for the ldap plugin
+# 
+pgina_ldap:
+  # The LdapHost property must be in the form of a list
+  LdapHost:
+    - 'ldap.server.com'
+  LdapPort: 389
+  LdapTimeout: 10
+  UseSsl: 'False'
+  RequireCert: 'False'
+  ServerCertFile: 'C:\path\to\the\cert.cer'
+  SearchDN: 'uid=user,cn=common,dc=example,dc=com'
+  SearchPW: 'searchpassword'
+  GroupDnPattern: 'cn=%g,cn=groups,dc=example,dc=com'
+  GroupMemberAttrib: 'member'
+  AllowEmptyPasswords: 'False'
+  DnPattern: 'uid=%u,cn=users,cn=accounts,dc=exmaple,dc=com'
+  DoSearch: 'False'
+  SearchFilter: '(memberOf=cn=ldapusers,cn=groups,cn=accounts,dc=example,dc=com)'
+  SearchContexts: []
+  #
+  # Specify the group authorization rules here. The way this is stored in the
+  # registry is a little tricky, so we try to normalize it here.
+  # 
+  # the ldap_group_rules should be specified as a list of dictionaries. The
+  # dictionary entries are as follows
+  #
+  # - ldap_group - the ldap group for this rule
+  # - is_member - true if the condition is the user is part of the group, false
+  # if the condition is that the user is not part of the group
+  # - authorize - true if you wish to authorize the users that meet the other
+  # conditions and false if you wish to deny authorization to the users that
+  # meet the other criteria
+  #
+  # The always dictionary entry MUST be on the same level as the 
+  # ldap_group_rules.
+  #
+  # always specifies the default rule if none of the other rules are matched. 
+  # you specify a dictionary entry, authorize, which, if true will authorize all
+  # users that don't match any other rules, or false, which will deny all users
+  # that don't match any other rules.
+  # 
+  # The default always statement is to deny all users that don't match the other
+  # rules.
+  #
+  GroupAuthzRules:
+    ldap_group_rules:
+      - ldap_group: 'group1'
+        is_member: True
+        authorize: True
+      - ldap_group: 'group2'
+        is_member: False
+        authorize: False
+    always:
+      authorize: False
+  AuthzRequireAuth: 'False'
+  AuthzAllowOnError: 'True'
+  # 
+  # Specify the gateway rules here. The way this is stored in the registry is 
+  # a little tricky, so we try to normalize it here.
+  #
+  # Gateway rules allow an ldap group member to be mapped to a local group on
+  # the windows machine.
+  #
+  # the gateway_rules must be a list of dictionaries containing the following
+  # entries:
+  #
+  # - ldap_group - the ldap group for this gateway rule
+  # - member - true if the user must be part of the ldap group, false if the
+  # user must not be part of the ldap group
+  # - local_group - The local group to put the user in if the user meets the 
+  # other conditions
+  #
+  # The always dictionary entry must be on the same level as the gateway_rules
+  # dictionary entry.
+  #
+  # always specifies the default local group to place users into. you do not
+  # need to specify the always dictionary, but if you do, it contains the 
+  # local_group dictionary entry that specifies the local group to place all
+  # users that do not match any of the other gateway rules.
+  GroupGatewayRules:
+    gateway_rules:
+      - ldap_group: 'ldapgroup1'
+        member: True
+        local_group: 'localgroup1'
+      - ldap_group: 'ldapgroup2'
+        member: True
+        local_group: 'localgroup2'
+    always:
+      local_group: 'Users'
