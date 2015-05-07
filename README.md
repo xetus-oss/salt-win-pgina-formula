@@ -34,4 +34,3 @@ pgina_ldap_pillar.example | LDAP plugin pillar data
 ## NOTES
 
 This salt state has been tested on a Windows Server 2012 and Windows 8.1.
-=======
