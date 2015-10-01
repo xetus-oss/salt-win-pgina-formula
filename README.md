@@ -1,7 +1,7 @@
 # salt-win-pgina-formula
 ---
 
-The salt state for installing and configuring [pGina](http://pgina.org/) on windows systems. 
+The salt state for installing and configuring [pGina](http://pgina.org/) on windows systems.
 
 This currently supports general configuration of pGina and configuration of the following two plugins.
 
@@ -19,13 +19,12 @@ salt must be configured to use win_repo to install windows packages and you must
 
 you will want to grab a copy of the [salt-winrepo](https://github.com/saltstack/salt-winrepo.git) git repository. This provides the following
 
-1. ms-vcpp-2012-redist - pgina dependency
-2. ms-vcpp-2012-redist_x86 - pgina dependency
-3. pgina - the pgina installer
+1. ms-vcpp-2012-redist - both 64 and 32 bit versions, pgina dependency
+2. pgina - the pgina installer
 
 #### (3) Pillar data
 
-There are three different pillar data example files, one for data pertaining to the general pGina configuration, and two for configuring the currently supported plugins. 
+There are three different pillar data example files, one for data pertaining to the general pGina configuration, and two for configuring the currently supported plugins.
 
 File Name | Contents
 ----------|---------
@@ -47,7 +46,7 @@ If you do not include any pillar data, pgina will remain in the default configur
 ## Configuration
 ---
 
-The pillar example files enumerate all the available configuration options available for the win-pGina salt formula. The pillar example files include more detailed information about the configuration options. There are three separate pillar example files: 
+The pillar example files enumerate all the available configuration options available for the win-pGina salt formula. The pillar example files include more detailed information about the configuration options. There are three separate pillar example files:
 
 File Name | Contents
 ----------|---------
@@ -63,7 +62,7 @@ The final pillar configuration can be supplied in one pillar file if desired.
 
 1. LDAP configuration pillar file
 
-``` 
+```
 pgina_general:
   # LDAP plugin
   0f52390b-c781-43ae-bd62-553c77fa4cf7:
@@ -75,13 +74,13 @@ pgina_general:
     authentication: True
     authorization: True
     gateway: True
-  IPluginAuthentication_Order: 
+  IPluginAuthentication_Order:
     - '0f52390b-c781-43ae-bd62-553c77fa4cf7'
     - '12FA152D-A2E3-4C8D-9535-5DCD49DFCB6D'
   IPluginAuthorization_Order:
     - '0f52390b-c781-43ae-bd62-553c77fa4cf7'
     - '12FA152D-A2E3-4C8D-9535-5DCD49DFCB6D'
-  IPluginAuthenticationGateway_Order: 
+  IPluginAuthenticationGateway_Order:
     - '0f52390b-c781-43ae-bd62-553c77fa4cf7'
     - '12FA152D-A2E3-4C8D-9535-5DCD49DFCB6D'
 
