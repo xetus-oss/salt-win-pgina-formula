@@ -17,9 +17,9 @@
 ms-vcpp-2012-redist:
   pkg.installed:
     {% if grains['cpuarch'] == "AMD64" %}
-    - name: ms-vcpp-2008-redist_x64
+    - name: ms-vcpp-2012-redist_x64
     {% else %}
-    - name: ms-vcpp-2008-redist_x86
+    - name: ms-vcpp-2012-redist_x86
     {% endif %}
 
 pgina:
