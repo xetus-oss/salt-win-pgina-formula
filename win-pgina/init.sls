@@ -13,19 +13,23 @@
 #                                                                              #
 ################################################################################
 
+# MS Visuall C++ is always required for pGina
+ms-vcpp-2012-redist_x86:
+  pkg.installed
 
-ms-vcpp-2012-redist:
-  pkg.installed:
-    {% if grains['cpuarch'] == "AMD64" %}
-    - name: ms-vcpp-2012-redist_x64
-    {% else %}
-    - name: ms-vcpp-2012-redist_x86
-    {% endif %}
+# If it's a 64bit system, also install ms-vcpp-2012-redist_x64
+{% if grains['cpuarch'] == "AMD64" %}
+ms-vcpp-2012-redist_x64:
+  pkg.installed
+{% endif %}
 
 pgina:
   pkg.installed:
     - require:
-      - pkg: ms-vcpp-2012-redist
+      - pkg: ms-vcpp-2012-redist_x86
+      {% if grains['cpuarch'] == "AMD64" %}
+      - pkg: ms-vcpp-2012-redist_x64
+      {% endif %}
 
 #
 # Loads the registry key meta information for PGina's plugins that are
