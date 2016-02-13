@@ -97,7 +97,7 @@ pgina:
   {% set currentkey = salt['reg.read_key'](
       'HKEY_LOCAL_MACHINE',
       meta_name.base_path,
-      reg_key) %}
+      reg_key).vdata %}
 
   {% if currentkey == None or salt['cmd.script'](
     'salt://win-pgina/powershell/decrypt.ps1',
