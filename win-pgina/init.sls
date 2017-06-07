@@ -94,7 +94,7 @@ pgina:
   # Verify that the encrypted registry entry doesn't match what we're trying to
   # set
   #
-  {% set currentkey = salt['reg.read_key'](
+  {% set currentkey = salt['reg.read_value'](
       'HKEY_LOCAL_MACHINE',
       meta_name.base_path,
       reg_key).vdata %}
@@ -135,29 +135,32 @@ pgina:
 # Sets the registry keys to the configured values
 #
 {% if run_reg_present %}
-HKEY_LOCAL_MACHINE\{{ meta_name.base_path }}\{{ reg_key }}:
+{% set reg_name = "HKEY_LOCAL_MACHINE\\" + meta_name.base_path %}
+{{ reg_name }}\\{{ reg_key }}-present:
   reg.present:
+    - name: {{ reg_name }}
+    - vname: {{ reg_key }}
     # The strings 'True' and 'False' get automatically coerced into boolean
     # values unless you wrap the jinja in single quotes. Since some of the
     # values are arrays, wrapping in single quotes for array values causes
     # YAML parse issues. We want to wrap jinja in single quotes only when the
     # value is a string (REG_SZ)
     {% if meta_name.properties[reg_key].type == "REG_SZ" %}
-    - value: '{{ final_reg_value }}'
+    - vdata: '{{ final_reg_value }}'
     # The YAML here is pretty terrible. newlines get replaced by spaces in
     # certain scenarios, and the multi value registry entries for pgina require
     # the newlines to be present, thus the need for this complication.
     {% elif meta_name.properties[reg_key].type == "REG_MULTI_SZ" %}
-    - value:
+    - vdata:
       {% for item in final_reg_value %}
       - |-
           {{ item | indent(10) }}
       {% endfor %}
     {% else %}
-    - value: {{ final_reg_value }}
+    - vdata: {{ final_reg_value }}
     {% endif %}
     - vtype: {{ meta_name.properties[reg_key].type }}
-    - reflection: False
+    - use_32bit_registry: False
 
 {% endif %}
 {% endfor %}
