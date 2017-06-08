@@ -8,6 +8,16 @@ This currently supports general configuration of pGina and configuration of the 
 1. Local Authentication
 2. LDAP
 
+## Available States
+
+#### win-pgina.installed
+
+Installs the pgina package and required c++ dependencies.
+
+#### win-pgina.configured
+
+Ensures the pGina package and required dependencies are installed, and configures the installed instace per the pillar configuration.
+
 ## Prerequisites
 ---
 
@@ -38,7 +48,7 @@ pgina_ldap_pillar.example | LDAP plugin pillar data
 Installing pgina on a windows system is just a matter of running the salt command
 
 ```
-salt 'win_system' state.sls win-pgina
+salt 'win_system' state.apply win-pgina.configured
 ```
 
 If you do not include any pillar data, pgina will remain in the default configuration that is applied after installation.
@@ -63,7 +73,7 @@ The final pillar configuration can be supplied in one pillar file if desired.
 1. LDAP configuration pillar file
 
 ```
-pgina_general:
+pgina.general:
   # LDAP plugin
   0f52390b-c781-43ae-bd62-553c77fa4cf7:
     authentication: True
@@ -84,7 +94,7 @@ pgina_general:
     - '0f52390b-c781-43ae-bd62-553c77fa4cf7'
     - '12FA152D-A2E3-4C8D-9535-5DCD49DFCB6D'
 
-pgina_local:
+pgina.local:
   AlwaysAuthenticate: 'False'
   AuthzLocalAdminsOnly: 'False'
   AuthzLocalGroupsOnly: 'False'
@@ -93,7 +103,7 @@ pgina_local:
   GroupCreateFailIsFail: 'True'
   BackgroundTimerSeconds: '60'
 
-pgina_ldap:
+pgina.ldap:
   LdapHost:
     - 'ldap.server.com'
   SearchDN: 'uid=user,cn=common,dc=example,dc=com'

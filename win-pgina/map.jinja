@@ -1,0 +1,41 @@
+
+{#
+ # Load the registry key meta information for PGina's plugins that are
+ # configurable through salt.
+ #
+ # Currently, this supports the following
+ # - general configuration of PGina
+ # - LocalMachine plugin configuration
+ # - LDAP plugin configuration
+ #}
+{% from 'win-pgina/meta/pgina_general_meta.sls' import pgina_general_meta with context %}
+{% from 'win-pgina/meta/pgina_local_meta.sls' import pgina_local_meta with context %}
+{% from 'win-pgina/meta/pgina_ldap_meta.sls' import pgina_ldap_meta with context %}
+
+{% set constants = {
+  "plugin_uuids": [
+    "0f52390b-c781-43ae-bd62-553c77fa4cf7",
+    "12FA152D-A2E3-4C8D-9535-5DCD49DFCB6D",
+    "a89df410-53ca-4fe1-a6ca-4479b841ca19",
+    "b68cf064-9299-4765-ac08-acb49f93f892",
+    "16fc47c0-f17b-4d99-a820-edbf0b0c764a",
+    "d73131d7-7af2-47bb-bbf4-4f8583b44962",
+    "81f8034e-e278-4754-b10c-7066656de5b7",
+    "ec3221a6-621f-44ce-b77b-e074298d6b4e",
+    "350047a0-2d0b-4e24-9f99-16cd18d6b142",
+    "98477b3a-830d-4bee-b270-2d7435275f9c"
+  ],
+  "meta": {
+    "general": pgina_general_meta,
+    "local": pgina_local_meta,
+    "ldap": pgina_ldap_meta
+  }
+} %}
+
+{% set config = salt["pillar.get"]("pgina", {
+  "cpp-pkg-version": "ms-vcpp-2012-redist",
+  "general": {},
+  "local": {},
+  "ldap": {}
+  }, merge=True)
+%}

@@ -5,7 +5,7 @@
 # name represents which options you wish to enable for a particular plugin
 # (ie Authentication, Authorization, etc...) 
 # 
-pgina_general:
+pgina.general:
   TileImage: 'C:\path\to\tile\image.png'
   EnableMotd: 'True'
   Motd: 'pGina Version: %v'

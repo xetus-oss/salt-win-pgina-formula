@@ -1,7 +1,7 @@
 # 
 # Pillar data for the PGina LocalAuthentication plugin
 # 
-pgina_local:
+pgina.local:
   AlwaysAuthenticate: 'False'
   AuthzLocalAdminsOnly: 'False'
   AuthzLocalGroupsOnly: 'False'

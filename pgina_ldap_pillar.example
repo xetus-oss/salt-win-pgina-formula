@@ -1,7 +1,7 @@
 # 
 # Pillar data representing configuration options for the ldap plugin
 # 
-pgina_ldap:
+pgina.ldap:
   # The LdapHost property must be in the form of a list
   LdapHost:
     - 'ldap.server.com'

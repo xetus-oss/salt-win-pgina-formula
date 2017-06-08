@@ -1,6 +1,88 @@
 from __future__ import print_function
 import sys
 
+def decrypt_value(value):
+  '''
+  A convenience wrapper around the win-pgina decrypt.ps1 powershell script.
+
+  Returns the supplied value, but decrypted.
+  '''
+  return __salt__['cmd.script'](
+            'salt://win-pgina/powershell/decrypt.ps1',
+            args=(' ' + value), 
+            shell="powershell"
+         )['stdout']
+
+
+def encrypt_value(value):
+  '''
+  A convenience wrapper aroudn the win-pgina encrypt.ps1 powrshell script.
+
+  Returns the supplied value, but encrypted.
+  '''
+  return __salt__['cmd.script'](
+            'salt://win-pgina/powershell/encrypt.ps1',
+            args=(' ' + value), 
+            shell="powershell"
+         )['stdout']
+
+
+def registry_value_changed(reg_base_path, reg_key, new_value):
+  '''
+  Determines whether the Windows registry key located at reg_base_path\\reg_key
+  matches the supplied new value. This is done by decrypting the existing value
+  (if it exists), and comparing the two decrypted values.
+
+  The LDAP plugin has a value for a registry key that needs to be encrypted
+  (using window's System.Security.Cryptography.ProtectedData Protect method in
+  the LocalMachine scope) and encoded in BASE64 before being stored in the
+  registry. Future-proofing this in case other registry items need to be
+  encrypted in this fashion in the future (but they probably won't)
+
+  Windows is nice enough to provide some sort of salt or something that results
+  in a different encrypted result everytime anything is passed through the
+  ProtectedData::Protect method, even if it happens to be the same thing being
+  encrypted twice. In order to not trigger a changed value each time this salt
+  state is run, we want to unencrypt the value stored in the registry and verify
+  that doesn't match what's being set. If it does, then we can skip setting the
+  registry entry.
+
+  Returns True if the supplied new_value is different from the current registry
+  value; False if they are the same.
+  '''
+  current_encrypted_value = __salt__['reg.read_value'](
+      'HKEY_LOCAL_MACHINE',
+      reg_base_path,
+      reg_key
+  )
+
+  if (current_encrypted_value is None or current_encrypted_value['vdata'] is None) and \
+     new_value is not None:
+    return True
+  
+  return decrypt_value(current_encrypted_value['vdata']) != new_value
+
+
+def transform_value_for_registry(reg_key, value, plugin_uuids):
+  '''
+  Transforms the supplied value into the final format expected by pGina. This 
+  is really just a convenience function that passes off to other formatting
+  functions internally.
+
+  Note that the value should be supplied in encrypted form if so required by
+  pGina.
+  '''
+  if reg_key == "GroupAuthzRules":
+    return format_auth_rules(value)
+
+  if reg_key == "GroupGatewayRules":
+    return format_gateway_rules(value)
+
+  if reg_key in plugin_uuids:
+    return format_plugin_features(value)
+
+  return value
+
 def format_auth_rules(rules):
   '''
   Converts the normalized ldap group authorization rules dictionary from pillar
